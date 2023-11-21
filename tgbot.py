@@ -2,6 +2,7 @@ import os
 
 import telebot
 import random
+import claster
 
 from telebot import custom_filters
 from telebot import StateMemoryStorage
@@ -27,18 +28,6 @@ HELP = """
 tasks = {}
 
 
-class PollState(StatesGroup):
-    name = State()
-    age = State()
-    command = State()
-    rand = State()
-    date = State()
-    delt = State()
-
-class HelpState(StatesGroup):
-    wait_text = State()
-
-
 @bot.message_handler(state="*", commands=['start'])
 def start_ex(message):
     bot.send_message(
@@ -50,16 +39,16 @@ def start_ex(message):
 @bot.message_handler(func=lambda message: '/hi' == message.text)
 def first(message):
     bot.send_message(message.chat.id, '_Ваше имя_?')
-    bot.set_state(message.from_user.id, PollState.name, message.chat.id)
+    bot.set_state(message.from_user.id, claster.PollState.name, message.chat.id)
 
-@bot.message_handler(state=PollState.name)
+@bot.message_handler(state=claster.PollState.name)
 def name(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['name'] = message.text
     bot.send_message(message.chat.id, 'Супер! _Ваш возраст?_')
-    bot.set_state(message.from_user.id, PollState.age, message.chat.id)
+    bot.set_state(message.from_user.id, claster.PollState.age, message.chat.id)
 
-@bot.message_handler(state=PollState.age)
+@bot.message_handler(state=claster.PollState.age)
 def age(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['age'] = message.text
@@ -75,9 +64,9 @@ def help(message):
 @bot.message_handler(func=lambda message: '/add' == message.text)
 def add(message):
     bot.send_message(message.chat.id, ' Введите: <дата> <задача>')
-    bot.set_state(message.from_user.id, PollState.command, message.chat.id)
+    bot.set_state(message.from_user.id, claster.PollState.command, message.chat.id)
 
-@bot.message_handler(state=PollState.command)
+@bot.message_handler(state=claster.PollState.command)
 def add_task(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['command'] = message.text
@@ -94,9 +83,9 @@ def add_task(message):
 @bot.message_handler(func=lambda message: '/random' == message.text)
 def add_random_task(message):
     bot.send_message(message.chat.id, ' Введите дату')
-    bot.set_state(message.from_user.id, PollState.rand, message.chat.id)
+    bot.set_state(message.from_user.id, claster.PollState.rand, message.chat.id)
 
-@bot.message_handler(state=PollState.rand)
+@bot.message_handler(state=claster.PollState.rand)
 def random_name(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['rand'] = message.text
@@ -112,9 +101,9 @@ def random_name(message):
 @bot.message_handler(func=lambda message: '/show' == message.text)
 def show(message):
     bot.send_message(message.chat.id, 'Введите дату')
-    bot.set_state(message.from_user.id, PollState.date, message.chat.id)
+    bot.set_state(message.from_user.id, claster.PollState.date, message.chat.id)
 
-@bot.message_handler(state=PollState.date)
+@bot.message_handler(state=claster.PollState.date)
 def show_task(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['date'] = message.text
@@ -132,9 +121,9 @@ def show_task(message):
 @bot.message_handler(func=lambda message: '/delete' == message.text)
 def add_random_task(message):
     bot.send_message(message.chat.id, ' Введите: <дата> <задача>')
-    bot.set_state(message.from_user.id, PollState.delt, message.chat.id)
+    bot.set_state(message.from_user.id, claster.PollState.delt, message.chat.id)
 
-@bot.message_handler(state=PollState.delt)
+@bot.message_handler(state=claster.PollState.delt)
 def random_name(message):
     with bot.retrieve_data(message.from_user.id, message.chat.id) as data:
         data['delt'] = message.text
