@@ -1,0 +1,4 @@
+﻿os
+random
+telebot==0.0.5
+telebot.handler_backends
